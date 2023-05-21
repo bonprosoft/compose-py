@@ -1,7 +1,7 @@
 import enum
 import os
 import typing
-from typing import Any, Dict, Literal, Optional, TypeVar, cast, overload
+from typing import Any, Dict, Optional, TypeVar, cast, overload
 
 from . import _yaml
 from .model_type import ModelType
@@ -10,6 +10,8 @@ ComposeSpecification = Any
 TObj = TypeVar("TObj")
 
 if typing.TYPE_CHECKING:
+    from typing import Literal
+
     from . import models_dataclasses, models_pydantic
 
 
@@ -17,7 +19,7 @@ if typing.TYPE_CHECKING:
 def dump_dict(
     obj: "models_pydantic.ComposeSpecification",
     *,
-    model: Literal[ModelType.PYDANTIC],
+    model: "Literal[ModelType.PYDANTIC]" = ...,
     simplify: bool = ...,
 ) -> Dict[str, Any]:
     ...
@@ -27,7 +29,7 @@ def dump_dict(
 def dump_dict(
     obj: "models_dataclasses.ComposeSpecification",
     *,
-    model: Literal[ModelType.DATACLASSES],
+    model: "Literal[ModelType.DATACLASSES]",
     simplify: bool = ...,
 ) -> Dict[str, Any]:
     ...
@@ -59,7 +61,7 @@ def dump_yaml(
     obj: "models_pydantic.ComposeSpecification",
     path: os.PathLike,
     *,
-    model: Literal[ModelType.PYDANTIC],
+    model: "Literal[ModelType.PYDANTIC]" = ...,
     simplify: bool = ...,
     dumper: Optional[_yaml.DumperType] = ...,
 ) -> None:
@@ -71,7 +73,7 @@ def dump_yaml(
     obj: "models_dataclasses.ComposeSpecification",
     path: os.PathLike,
     *,
-    model: Literal[ModelType.DATACLASSES],
+    model: "Literal[ModelType.DATACLASSES]",
     simplify: bool = ...,
     dumper: Optional[_yaml.DumperType] = ...,
 ) -> None:
