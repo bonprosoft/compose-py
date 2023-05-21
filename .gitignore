@@ -3,3 +3,4 @@
 compose_py/models_pydantic/_generated.py
 compose_py/models_dataclasses/_generated.py
 __pycache__
+dist/
