@@ -19,6 +19,7 @@ pydantic = [
   "pyyaml>=5.1",
 ]
 dataclasses = [
+  "dacite>=1.0",
   "pyyaml>=5.1",
 ]
 dev = [
