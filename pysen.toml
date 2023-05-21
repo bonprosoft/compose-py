@@ -1,0 +1,26 @@
+[tool.pysen]
+version = "0.10"
+
+[tool.pysen.lint]
+enable_black = true
+enable_flake8 = true
+enable_isort = true
+enable_mypy = true
+mypy_preset = "strict"
+line_length = 88
+py_version = "py38"
+mypy_ignore_packages = [
+  "compose_py.models_dataclasses._generated",
+  "compose_py.models_pydantic._generated",
+]
+
+[[tool.pysen.lint.mypy_targets]]
+  paths = [
+    "compose_py",
+  ]
+
+[tool.pysen.lint.source]
+  excludes = [
+    "compose_py/models_dataclasses/_generated.py",
+    "compose_py/models_pydantic/_generated.py",
+  ]
