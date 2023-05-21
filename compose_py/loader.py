@@ -1,4 +1,4 @@
-import pathlib
+import os
 import typing
 from typing import Any, Dict, Literal, Optional, overload
 
@@ -15,7 +15,7 @@ if typing.TYPE_CHECKING:
 def load_dict(
     data: Dict[str, Any],
     *,
-    model: Literal[ModelType.PYDANTIC],
+    model: Literal[ModelType.PYDANTIC] = ...,
 ) -> "models_pydantic.ComposeSpecification":
     ...
 
@@ -51,9 +51,9 @@ def load_dict(
 
 @overload
 def load_yaml(
-    path: pathlib.Path,
+    path: os.PathLike,
     *,
-    model: Literal[ModelType.PYDANTIC],
+    model: Literal[ModelType.PYDANTIC] = ...,
     loader: Optional[_yaml.LoaderType] = ...,
 ) -> "models_pydantic.ComposeSpecification":
     ...
@@ -61,7 +61,7 @@ def load_yaml(
 
 @overload
 def load_yaml(
-    path: pathlib.Path,
+    path: os.PathLike,
     *,
     model: Literal[ModelType.DATACLASSES],
     loader: Optional[_yaml.LoaderType] = ...,
@@ -71,7 +71,7 @@ def load_yaml(
 
 @overload
 def load_yaml(
-    path: pathlib.Path,
+    path: os.PathLike,
     *,
     model: ModelType,
     loader: Optional[_yaml.LoaderType] = ...,
@@ -80,7 +80,7 @@ def load_yaml(
 
 
 def load_yaml(
-    path: pathlib.Path,
+    path: os.PathLike,
     *,
     model: ModelType = ModelType.PYDANTIC,
     loader: Optional[_yaml.LoaderType] = None,

@@ -1,5 +1,5 @@
 import enum
-import pathlib
+import os
 import typing
 from typing import Any, Dict, Literal, Optional, TypeVar, cast, overload
 
@@ -57,7 +57,7 @@ def dump_dict(
 @overload
 def dump_yaml(
     obj: "models_pydantic.ComposeSpecification",
-    path: pathlib.Path,
+    path: os.PathLike,
     *,
     model: Literal[ModelType.PYDANTIC],
     simplify: bool = ...,
@@ -69,7 +69,7 @@ def dump_yaml(
 @overload
 def dump_yaml(
     obj: "models_dataclasses.ComposeSpecification",
-    path: pathlib.Path,
+    path: os.PathLike,
     *,
     model: Literal[ModelType.DATACLASSES],
     simplify: bool = ...,
@@ -81,7 +81,7 @@ def dump_yaml(
 @overload
 def dump_yaml(
     obj: ComposeSpecification,
-    path: pathlib.Path,
+    path: os.PathLike,
     *,
     model: ModelType,
     simplify: bool = ...,
@@ -92,7 +92,7 @@ def dump_yaml(
 
 def dump_yaml(
     obj: ComposeSpecification,
-    path: pathlib.Path,
+    path: os.PathLike,
     *,
     model: ModelType = ModelType.PYDANTIC,
     simplify: bool = True,
