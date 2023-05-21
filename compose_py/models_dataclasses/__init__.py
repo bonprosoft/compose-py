@@ -22,24 +22,24 @@ def load_dict(
 @overload
 def load_dict(
     data: Dict[str, Any],
-    klass: Type[TModel],
+    data_class: Type[TModel],
     *,
     config: Optional[dacite.Config] = ...,
 ) -> TModel:
     ...
 
 
-# NOTE: Use Any for klass and return type to avoid the following issue:
+# NOTE: Use Any for data_class and return type to avoid the following issue:
 # https://github.com/python/mypy/issues/3737
 def load_dict(
     data: Dict[str, Any],
-    klass: Any = None,
+    data_class: Any = None,
     *,
     config: Optional[dacite.Config] = None,
 ) -> Any:
-    klass = klass or ComposeSpecification
+    data_class = data_class or ComposeSpecification
     config = config or dacite.Config(cast=[enum.Enum])
-    return dacite.from_dict(data_class=klass, data=data, config=config)
+    return dacite.from_dict(data_class=data_class, data=data, config=config)
 
 
 def dump_dict(

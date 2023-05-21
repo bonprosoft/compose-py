@@ -14,18 +14,18 @@ def load_dict(data: Dict[str, Any]) -> ComposeSpecification:
 
 
 @overload
-def load_dict(data: Dict[str, Any], klass: Type[TModel]) -> TModel:
+def load_dict(data: Dict[str, Any], data_class: Type[TModel]) -> TModel:
     ...
 
 
-# NOTE: Use Any for klass and return type to avoid the following issue:
+# NOTE: Use Any for data_class and return type to avoid the following issue:
 # https://github.com/python/mypy/issues/3737
 def load_dict(
     data: Dict[str, Any],
-    klass: Any = None,
+    data_class: Any = None,
 ) -> Any:
-    klass = klass or ComposeSpecification
-    return klass(**data)
+    data_class = data_class or ComposeSpecification
+    return data_class(**data)
 
 
 def dump_dict(
