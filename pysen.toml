@@ -17,6 +17,7 @@ mypy_ignore_packages = [
 [[tool.pysen.lint.mypy_targets]]
   paths = [
     "compose_py",
+    "tests",
   ]
 
 [tool.pysen.lint.source]

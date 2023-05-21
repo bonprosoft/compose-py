@@ -1,0 +1,19 @@
+x-common: &common
+  network: "hosts"
+  command: echo "common"
+
+version: "3.9"
+services:
+  web:
+    <<: *common
+    build: .
+    ports:
+      - "8000:5000"
+    volumes:
+      - .:/code
+    environment:
+      FLASK_DEBUG: "true"
+    command: echo "web"
+  redis:
+    <<: *common
+    image: "redis:alpine"

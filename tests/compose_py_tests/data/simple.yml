@@ -1,0 +1,14 @@
+# https://docs.docker.com/compose/gettingstarted/
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:5000"
+    volumes:
+      - .:/code
+    environment:
+      FLASK_DEBUG: "true"
+  redis:
+    image: "redis:alpine"
+    cgroup: "host"

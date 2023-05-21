@@ -34,6 +34,6 @@ def dump(
     *,
     dumper: Optional[DumperType] = None,
 ) -> None:
-    dumper = dumper or yaml.Dumper
+    dumper = dumper or yaml.SafeDumper
     with path.open("w") as f:
         yaml.dump(obj, f, Dumper=dumper)

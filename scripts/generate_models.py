@@ -11,11 +11,14 @@ def convert_json_schema(
     output_path: pathlib.Path,
     model_type: str = "pydantic.BaseModel",
 ) -> None:
+    # NOTE: Don't use '--enum-field-as-literal all' to support py36,37 environments.
     subprocess.check_call(
         [
             "datamodel-codegen",
             "--input-file-type",
             "jsonschema",
+            "--use-subclass-enum",
+            "--capitalise-enum-members",
             "--output-model-type",
             model_type,
             "--input",
