@@ -46,5 +46,8 @@ dev = [
 [tool.setuptools]
 packages = ["compose_py"]
 
+[tool.setuptools.package-data]
+"compose_py" = ["py.typed"]
+
 [tool.setuptools.dynamic]
 version = {attr = "compose_py._version.__version__"}
