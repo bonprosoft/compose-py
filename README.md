@@ -1,6 +1,6 @@
 # compose-py
 
-A Python library for parsing and loading Compose files
+A Python library for parsing and loading [Compose](https://github.com/compose-spec/compose-spec) files
 
 ## Installation
 
