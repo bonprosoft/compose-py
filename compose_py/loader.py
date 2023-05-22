@@ -1,8 +1,8 @@
-import os
 import typing
 from typing import Any, Dict, Optional, overload
 
 from . import _yaml
+from ._types import Path
 from .model_type import ModelType
 
 ComposeSpecification = Any
@@ -53,7 +53,7 @@ def load_dict(
 
 @overload
 def load_yaml(
-    path: os.PathLike,
+    path: Path,
     *,
     model: "Literal[ModelType.PYDANTIC]" = ...,
     loader: Optional[_yaml.LoaderType] = ...,
@@ -63,7 +63,7 @@ def load_yaml(
 
 @overload
 def load_yaml(
-    path: os.PathLike,
+    path: Path,
     *,
     model: "Literal[ModelType.DATACLASSES]",
     loader: Optional[_yaml.LoaderType] = ...,
@@ -73,7 +73,7 @@ def load_yaml(
 
 @overload
 def load_yaml(
-    path: os.PathLike,
+    path: Path,
     *,
     model: ModelType,
     loader: Optional[_yaml.LoaderType] = ...,
@@ -82,7 +82,7 @@ def load_yaml(
 
 
 def load_yaml(
-    path: os.PathLike,
+    path: Path,
     *,
     model: ModelType = ModelType.PYDANTIC,
     loader: Optional[_yaml.LoaderType] = None,

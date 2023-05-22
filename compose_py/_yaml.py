@@ -1,9 +1,10 @@
-import os
 import pathlib
 import typing
 from typing import Any, Dict, Optional, Type, Union
 
 import yaml
+
+from ._types import Path
 
 DumperType = Any
 
@@ -18,12 +19,12 @@ else:
     LoaderType = Any
 
 
-def ensure_pathlib_obj(p: os.PathLike) -> pathlib.Path:
+def ensure_pathlib_obj(p: Path) -> pathlib.Path:
     return pathlib.Path(p)
 
 
 def load(
-    path: os.PathLike,
+    path: Path,
     *,
     loader: Optional[LoaderType] = None,
 ) -> Dict[str, Any]:
@@ -36,7 +37,7 @@ def load(
 
 def dump(
     obj: Any,
-    path: os.PathLike,
+    path: Path,
     *,
     dumper: Optional[DumperType] = None,
 ) -> None:
