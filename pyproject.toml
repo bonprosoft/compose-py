@@ -43,8 +43,9 @@ dev = [
   "types-PyYAML==6.0.12.9",
 ]
 
-[tool.setuptools]
-packages = ["compose_py"]
+[tool.setuptools.packages.find]
+exclude = ["build", "tests"]
+namespaces = false
 
 [tool.setuptools.package-data]
 "compose_py" = ["py.typed"]
