@@ -23,7 +23,11 @@ jobs:
         python -m venv .venv
         source .venv/bin/activate
         pip install -e ".[dev,pydantic,dataclasses]"
+    - name: Check if generated modules are up-to-date
+      run: |
+        source .venv/bin/activate
         ./scripts/generate_models.py
+        git diff --exit-code HEAD --
     - name: Lint
       run: |
         source .venv/bin/activate
