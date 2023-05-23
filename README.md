@@ -36,6 +36,7 @@ web2 = obj.services["web"].copy()
 web2.command = "--port 8081"
 obj.services["web2"] = web2
 
+print(compose_py.dump_yaml_str(obj))
 with open("docker-compose-modified.yml", "w") as f:
     compose_py.dump_yaml(obj, f)
 ```
@@ -57,6 +58,7 @@ web2 = obj.services["web"].copy()
 web2.command = "--port 8081"
 obj.services["web2"] = web2
 
+print(compose_py.dump_yaml_str(obj))
 with open("docker-compose-modified.yml", "w") as f:
     compose_py.dump_yaml(obj, f, model=compose_py.ModelType.DATACLASSES)
 ```

@@ -2,7 +2,12 @@ import pathlib
 import tempfile
 
 from compose_py import _yaml, models_pydantic
-from compose_py.dumper import dump_dict, dump_yaml, replace_enum_with_values
+from compose_py.dumper import (
+    dump_dict,
+    dump_yaml,
+    dump_yaml_str,
+    replace_enum_with_values,
+)
 from compose_py.loader import load_yaml
 from compose_py.model_type import ModelType
 
@@ -51,6 +56,19 @@ def test_load_and_dump_yaml_dataclasses(simple_yml: pathlib.Path) -> None:
         with saved_path.open("r") as f:
             data = _yaml.load(f)
         assert data["services"]["redis"]["cgroup"] == "host"
+
+
+def test_dump_yaml_str(simple_yml: pathlib.Path) -> None:
+    with simple_yml.open("r") as f:
+        data_pydantic = load_yaml(f, model=ModelType.PYDANTIC)
+
+    content = dump_yaml_str(data_pydantic, model=ModelType.PYDANTIC)
+    with tempfile.TemporaryDirectory() as td:
+        tempdir = pathlib.Path(td)
+        saved_path = tempdir / "pydantic.yml"
+
+        saved_path.write_text(content)
+        assert_yaml_files(simple_yml, saved_path)
 
 
 def test_replace_enum_with_values(simple_yml: pathlib.Path) -> None:

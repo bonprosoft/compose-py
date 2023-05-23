@@ -1,4 +1,5 @@
 import enum
+import io
 import typing
 from typing import Any, Dict, Optional, TextIO, TypeVar, cast, overload
 
@@ -102,6 +103,57 @@ def dump_yaml(
     data = dump_dict(obj, model=model, simplify=simplify)
     data = replace_enum_with_values(data)
     _yaml.dump(data, stream, dumper=dumper)
+
+
+@overload
+def dump_yaml_str(
+    obj: "models_pydantic.ComposeSpecification",
+    *,
+    model: "Literal[ModelType.PYDANTIC]" = ...,
+    simplify: bool = ...,
+    dumper: Optional[_yaml.DumperType] = ...,
+) -> str:
+    ...
+
+
+@overload
+def dump_yaml_str(
+    obj: "models_dataclasses.ComposeSpecification",
+    *,
+    model: "Literal[ModelType.DATACLASSES]",
+    simplify: bool = ...,
+    dumper: Optional[_yaml.DumperType] = ...,
+) -> str:
+    ...
+
+
+@overload
+def dump_yaml_str(
+    obj: ComposeSpecification,
+    *,
+    model: ModelType,
+    simplify: bool = ...,
+    dumper: Optional[_yaml.DumperType] = ...,
+) -> str:
+    ...
+
+
+def dump_yaml_str(
+    obj: ComposeSpecification,
+    *,
+    model: ModelType = ModelType.PYDANTIC,
+    simplify: bool = True,
+    dumper: Optional[_yaml.DumperType] = None,
+) -> str:
+    with io.StringIO() as buf:
+        dump_yaml(
+            obj,
+            stream=buf,
+            model=model,
+            simplify=simplify,
+            dumper=dumper,
+        )
+        return buf.getvalue()
 
 
 def replace_enum_with_values(obj: TObj) -> TObj:

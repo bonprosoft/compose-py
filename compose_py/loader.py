@@ -1,3 +1,4 @@
+import io
 import typing
 from typing import Any, Dict, Optional, TextIO, overload
 
@@ -88,3 +89,43 @@ def load_yaml(
 ) -> ComposeSpecification:
     data = _yaml.load(stream, loader=loader)
     return load_dict(data, model=model)
+
+
+@overload
+def load_yaml_str(
+    content: str,
+    *,
+    model: "Literal[ModelType.PYDANTIC]" = ...,
+    loader: Optional[_yaml.LoaderType] = ...,
+) -> "models_pydantic.ComposeSpecification":
+    ...
+
+
+@overload
+def load_yaml_str(
+    content: str,
+    *,
+    model: "Literal[ModelType.DATACLASSES]",
+    loader: Optional[_yaml.LoaderType] = ...,
+) -> "models_dataclasses.ComposeSpecification":
+    ...
+
+
+@overload
+def load_yaml_str(
+    content: str,
+    *,
+    model: ModelType,
+    loader: Optional[_yaml.LoaderType] = ...,
+) -> ComposeSpecification:
+    ...
+
+
+def load_yaml_str(
+    content: str,
+    *,
+    model: ModelType = ModelType.PYDANTIC,
+    loader: Optional[_yaml.LoaderType] = None,
+) -> ComposeSpecification:
+    with io.StringIO(content) as buf:
+        return load_yaml(buf, model=model, loader=loader)
