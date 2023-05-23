@@ -1,10 +1,7 @@
-import pathlib
 import typing
-from typing import Any, Dict, Optional, Type, Union
+from typing import Any, Dict, Optional, TextIO, Type, Union
 
 import yaml
-
-from ._types import Path
 
 DumperType = Any
 
@@ -19,29 +16,21 @@ else:
     LoaderType = Any
 
 
-def ensure_pathlib_obj(p: Path) -> pathlib.Path:
-    return pathlib.Path(p)
-
-
 def load(
-    path: Path,
+    stream: TextIO,
     *,
     loader: Optional[LoaderType] = None,
 ) -> Dict[str, Any]:
-    path = ensure_pathlib_obj(path)
     loader = loader or yaml.SafeLoader
-    with path.open("r") as f:
-        data: Dict[str, Any] = yaml.load(f, Loader=loader)
-        return data
+    data: Dict[str, Any] = yaml.load(stream, Loader=loader)
+    return data
 
 
 def dump(
     obj: Any,
-    path: Path,
+    stream: TextIO,
     *,
     dumper: Optional[DumperType] = None,
 ) -> None:
-    path = ensure_pathlib_obj(path)
     dumper = dumper or yaml.SafeDumper
-    with path.open("w") as f:
-        yaml.dump(obj, f, Dumper=dumper)
+    yaml.dump(obj, stream, Dumper=dumper)

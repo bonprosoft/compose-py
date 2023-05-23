@@ -4,10 +4,12 @@ from compose_py import _yaml
 
 
 def test_load(simple_yml: pathlib.Path, anchor_yml: pathlib.Path) -> None:
-    simple = _yaml.load(simple_yml)
+    with simple_yml.open("r") as f:
+        simple = _yaml.load(f)
     assert simple["services"]["web"]["ports"] == ["8000:5000"]
 
-    anchor = _yaml.load(anchor_yml)
+    with anchor_yml.open("r") as f:
+        anchor = _yaml.load(f)
     assert anchor["services"]["web"]["ports"] == ["8000:5000"]
 
     # Check anchor references are resolved at `load`

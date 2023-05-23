@@ -1,9 +1,8 @@
 import enum
 import typing
-from typing import Any, Dict, Optional, TypeVar, cast, overload
+from typing import Any, Dict, Optional, TextIO, TypeVar, cast, overload
 
 from . import _yaml
-from ._types import Path
 from .model_type import ModelType
 
 ComposeSpecification = Any
@@ -59,7 +58,7 @@ def dump_dict(
 @overload
 def dump_yaml(
     obj: "models_pydantic.ComposeSpecification",
-    path: Path,
+    stream: TextIO,
     *,
     model: "Literal[ModelType.PYDANTIC]" = ...,
     simplify: bool = ...,
@@ -71,7 +70,7 @@ def dump_yaml(
 @overload
 def dump_yaml(
     obj: "models_dataclasses.ComposeSpecification",
-    path: Path,
+    stream: TextIO,
     *,
     model: "Literal[ModelType.DATACLASSES]",
     simplify: bool = ...,
@@ -83,7 +82,7 @@ def dump_yaml(
 @overload
 def dump_yaml(
     obj: ComposeSpecification,
-    path: Path,
+    stream: TextIO,
     *,
     model: ModelType,
     simplify: bool = ...,
@@ -94,7 +93,7 @@ def dump_yaml(
 
 def dump_yaml(
     obj: ComposeSpecification,
-    path: Path,
+    stream: TextIO,
     *,
     model: ModelType = ModelType.PYDANTIC,
     simplify: bool = True,
@@ -102,7 +101,7 @@ def dump_yaml(
 ) -> None:
     data = dump_dict(obj, model=model, simplify=simplify)
     data = replace_enum_with_values(data)
-    _yaml.dump(data, path, dumper=dumper)
+    _yaml.dump(data, stream, dumper=dumper)
 
 
 def replace_enum_with_values(obj: TObj) -> TObj:

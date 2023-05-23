@@ -6,7 +6,8 @@ from compose_py.model_type import ModelType
 
 
 def test_load_yaml_pydantic(simple_yml: pathlib.Path) -> None:
-    data_pydantic = load_yaml(simple_yml, model=ModelType.PYDANTIC)
+    with simple_yml.open("r") as f:
+        data_pydantic = load_yaml(f, model=ModelType.PYDANTIC)
     assert isinstance(data_pydantic, models_pydantic.ComposeSpecification)
     services = data_pydantic.services
     assert services is not None
@@ -19,7 +20,8 @@ def test_load_yaml_pydantic(simple_yml: pathlib.Path) -> None:
 
 
 def test_load_yaml_dataclasses(simple_yml: pathlib.Path) -> None:
-    data_dataclasses = load_yaml(simple_yml, model=ModelType.DATACLASSES)
+    with simple_yml.open("r") as f:
+        data_dataclasses = load_yaml(f, model=ModelType.DATACLASSES)
     assert isinstance(data_dataclasses, models_dataclasses.ComposeSpecification)
     services = data_dataclasses.services
     assert services is not None
