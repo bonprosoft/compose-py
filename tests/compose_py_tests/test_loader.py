@@ -1,7 +1,7 @@
 import pathlib
 
 from compose_py import models_dataclasses, models_pydantic
-from compose_py.loader import load_yaml
+from compose_py.loader import load_yaml, load_yaml_str
 from compose_py.model_type import ModelType
 
 
@@ -31,3 +31,16 @@ def test_load_yaml_dataclasses(simple_yml: pathlib.Path) -> None:
         s for k, s in services.items() if k == "redis"
     )
     assert redis.cgroup is models_dataclasses.Cgroup.HOST
+
+
+def test_load_yaml_str(simple_yml: pathlib.Path) -> None:
+    content = simple_yml.read_text()
+    data_from_str = load_yaml_str(content, model=ModelType.PYDANTIC)
+    assert isinstance(data_from_str, models_pydantic.ComposeSpecification)
+    services = data_from_str.services
+    assert services is not None
+    assert len(services) == 2
+
+    with simple_yml.open("r") as f:
+        data_from_fs = load_yaml(f, model=ModelType.PYDANTIC)
+    assert data_from_str == data_from_fs
