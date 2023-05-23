@@ -8,8 +8,10 @@ from compose_py.model_type import ModelType
 
 
 def assert_yaml_files(expected: pathlib.Path, actual: pathlib.Path) -> None:
-    expected_content = _yaml.load(expected)
-    actual_content = _yaml.load(actual)
+    with expected.open("r") as f:
+        expected_content = _yaml.load(f)
+    with actual.open("r") as f:
+        actual_content = _yaml.load(f)
 
     assert expected_content == actual_content
 
@@ -17,15 +19,18 @@ def assert_yaml_files(expected: pathlib.Path, actual: pathlib.Path) -> None:
 def test_load_and_dump_yaml_pydantic(simple_yml: pathlib.Path) -> None:
     with tempfile.TemporaryDirectory() as td:
         tempdir = pathlib.Path(td)
-
-        data_pydantic = load_yaml(simple_yml, model=ModelType.PYDANTIC)
         saved_path = tempdir / "pydantic.yml"
-        dump_yaml(data_pydantic, saved_path, model=ModelType.PYDANTIC)
+
+        with simple_yml.open("r") as f:
+            data_pydantic = load_yaml(f, model=ModelType.PYDANTIC)
+        with saved_path.open("w") as f:
+            dump_yaml(data_pydantic, f, model=ModelType.PYDANTIC)
 
         assert_yaml_files(simple_yml, saved_path)
 
         # Check if enum is represented with its value
-        data = _yaml.load(saved_path)
+        with saved_path.open("r") as f:
+            data = _yaml.load(f)
         assert data["services"]["redis"]["cgroup"] == "host"
 
 
@@ -34,19 +39,23 @@ def test_load_and_dump_yaml_dataclasses(simple_yml: pathlib.Path) -> None:
         tempdir = pathlib.Path(td)
         saved_path = tempdir / "dataclasses.yml"
 
-        data_dataclasses = load_yaml(simple_yml, model=ModelType.DATACLASSES)
-        dump_yaml(data_dataclasses, saved_path, model=ModelType.DATACLASSES)
-
-        saved_dataclasses = load_yaml(saved_path, model=ModelType.DATACLASSES)
+        with simple_yml.open("r") as f:
+            data_dataclasses = load_yaml(f, model=ModelType.DATACLASSES)
+        with saved_path.open("w") as f:
+            dump_yaml(data_dataclasses, f, model=ModelType.DATACLASSES)
+        with saved_path.open("r") as f:
+            saved_dataclasses = load_yaml(f, model=ModelType.DATACLASSES)
         assert data_dataclasses == saved_dataclasses
 
         # Check if enum is represented with its value
-        data = _yaml.load(saved_path)
+        with saved_path.open("r") as f:
+            data = _yaml.load(f)
         assert data["services"]["redis"]["cgroup"] == "host"
 
 
 def test_replace_enum_with_values(simple_yml: pathlib.Path) -> None:
-    pydantic_model = load_yaml(simple_yml, model=ModelType.PYDANTIC)
+    with simple_yml.open("r") as f:
+        pydantic_model = load_yaml(f, model=ModelType.PYDANTIC)
     pydantic_dict = dump_dict(pydantic_model, model=ModelType.PYDANTIC)
     assert pydantic_dict["services"]["redis"]["cgroup"] is models_pydantic.Cgroup.HOST
 

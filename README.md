@@ -26,16 +26,18 @@ pip install "compose-py[dataclasses]"
 ```py
 import compose_py
 
-obj = compose_py.load_yaml("docker-compose.yml")
+with open("docker-compose.yml", "r") as f:
+    obj = compose_py.load_yaml(f)
 print(obj)  # Prints 'compose_py.models_pydantic.ComposeSpecification(...)'
 print(obj.services["web"])  # Prints 'compose_py.models_pydantic.Service(...)'
 
 # Copy and modify the existing service, then add it to the specification
 web2 = obj.services["web"].copy()
-web2.command = '--port 8081'
+web2.command = "--port 8081"
 obj.services["web2"] = web2
 
-compose_py.dump_yaml(obj, "docker-compose-modified.yml")
+with open("docker-compose-modified.yml", "w") as f:
+    compose_py.dump_yaml(obj, f)
 ```
 
 You can find more APIs under `compose_py.models_pydantic` package.
@@ -45,16 +47,18 @@ You can find more APIs under `compose_py.models_pydantic` package.
 ```py
 import compose_py
 
-obj = compose_py.load_yaml("docker-compose.yml", model=compose_py.ModelType.DATACLASSES)
+with open("docker-compose.yml", "r") as f:
+    obj = compose_py.load_yaml(f, model=compose_py.ModelType.DATACLASSES)
 print(obj)  # Prints 'compose_py.models_dataclasses.ComposeSpecification(...)'
 print(obj.services["web"])  # Prints 'compose_py.models_dataclasses.Service(...)'
 
 # Copy and modify the existing service, then add it to the specification
 web2 = obj.services["web"].copy()
-web2.command = '--port 8081'
+web2.command = "--port 8081"
 obj.services["web2"] = web2
 
-compose_py.dump_yaml(obj, "docker-compose-modified.yml", model=compose_py.ModelType.DATACLASSES)
+with open("docker-compose-modified.yml", "w") as f:
+    compose_py.dump_yaml(obj, f, model=compose_py.ModelType.DATACLASSES)
 ```
 
 You can find more APIs under `compose_py.models_dataclasses` package.
