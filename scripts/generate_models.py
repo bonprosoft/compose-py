@@ -20,6 +20,7 @@ def convert_json_schema(
             "--use-subclass-enum",
             "--capitalise-enum-members",
             "--disable-timestamp",
+            "--collapse-root-models",
             "--output-model-type",
             model_type,
             "--input",
