@@ -14,9 +14,13 @@ mypy_ignore_packages = [
   "compose_py.models_pydantic._generated",
 ]
 
+[[tool.pysen.lint.mypy_plugins]]
+function = "pydantic.mypy"
+
 [[tool.pysen.lint.mypy_targets]]
   paths = [
     "compose_py",
+    "examples",
     "tests",
   ]
 
