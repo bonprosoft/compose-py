@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 
+"""
+An example that shows
+- Usage of the builder pattern to construct service definitions
+- The advantages of putting initialization logic along with a composite
+  specification into a single script (See: `initialize()` method)
+
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -95,6 +103,11 @@ def create_compose() -> ComposeSpecification:
     )
 
 
+def initialize() -> None:
+    # Disable access control of X to host GUI applications in a container
+    subprocess.check_call(["xhost", "+"])
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--print", action="store_true")
@@ -107,7 +120,7 @@ def main() -> None:
         print(compose_content)
         return
 
-    subprocess.check_call(["xhost", "+"])
+    initialize()
     subprocess.run(
         ["docker", "compose", "-f", "-"] + args.commands,
         input=compose_content.encode("utf-8"),
