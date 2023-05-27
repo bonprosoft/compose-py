@@ -16,16 +16,16 @@ from compose_py.models_pydantic import ComposeSpecification, Service
 
 def create_compose(
     num_services: int,
-    port_starts: int,
+    port_begin: int,
 ) -> ComposeSpecification:
     services = []
     for i in range(num_services):
-        listen_port = port_starts + i
+        service_port = port_begin + i
         services.append(
             Service(
                 image="nginx",
                 container_name=f"nginx-{i}",
-                ports=[f"{listen_port}:80"],
+                ports=[f"{service_port}:80"],
             )
         )
 
@@ -37,16 +37,16 @@ def create_compose(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--print", action="store_true")
-    parser.add_argument("-s", "--port-starts", type=int, default=20080)
+    parser.add_argument("-s", "--port-begin", type=int, default=20080)
     parser.add_argument("-n", "--num-services", type=int, default=3)
     parser.add_argument("commands", nargs=argparse.REMAINDER)
     args = parser.parse_args()
-    port_starts: int = args.port_starts
+    port_begin: int = args.port_begin
     num_services: int = args.num_services
 
     compose = create_compose(
         num_services=num_services,
-        port_starts=port_starts,
+        port_begin=port_begin,
     )
     compose_content = compose_py.dump_yaml_str(compose)
     if args.print:
