@@ -44,7 +44,7 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-exclude = ["build", "tests"]
+exclude = ["build", "examples", "tests"]
 namespaces = false
 
 [tool.setuptools.package-data]
