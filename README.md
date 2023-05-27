@@ -65,3 +65,7 @@ with open("docker-compose-modified.yml", "w") as f:
 
 You can find more APIs under `compose_py.models_dataclasses` package.
 
+## Examples
+
+See `examples/` directory to find examples.
+
