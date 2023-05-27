@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+"""
+An example that shows
+- Basic usage of compose_py
+- How to increase the number of services programatically
+
+"""
+
 import argparse
 import subprocess
 
