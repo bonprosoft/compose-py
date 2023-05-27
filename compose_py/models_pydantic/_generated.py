@@ -214,10 +214,6 @@ class GenericResource(BaseModel):
     discrete_resource_spec: Optional[DiscreteResourceSpec] = None
 
 
-class GenericResources(BaseModel):
-    __root__: List[GenericResource]
-
-
 class ConfigItem(BaseModel):
     class Config:
         extra = Extra.forbid
@@ -248,20 +244,6 @@ class External2(BaseModel):
     name: Optional[str] = None
 
 
-class Command(BaseModel):
-    __root__: Optional[Union[str, List[str]]]
-
-
-class ListOfStrings(BaseModel):
-    __root__: List[str] = Field(..., unique_items=True)
-
-
-class ListOrDict(BaseModel):
-    __root__: Union[
-        Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]
-    ]
-
-
 class BlkioLimit(BaseModel):
     class Config:
         extra = Extra.forbid
@@ -289,10 +271,6 @@ class ServiceConfigOrSecretItem(BaseModel):
     mode: Optional[float] = None
 
 
-class ServiceConfigOrSecret(BaseModel):
-    __root__: List[Union[str, ServiceConfigOrSecretItem]]
-
-
 class Constraints(BaseModel):
     __root__: Any
 
@@ -304,21 +282,31 @@ class BuildItem(BaseModel):
     context: Optional[str] = None
     dockerfile: Optional[str] = None
     dockerfile_inline: Optional[str] = None
-    args: Optional[ListOrDict] = None
-    ssh: Optional[ListOrDict] = None
-    labels: Optional[ListOrDict] = None
+    args: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
+    ssh: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
+    labels: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     cache_from: Optional[List[str]] = None
     cache_to: Optional[List[str]] = None
     no_cache: Optional[bool] = None
-    additional_contexts: Optional[ListOrDict] = None
+    additional_contexts: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     network: Optional[str] = None
     pull: Optional[bool] = None
     target: Optional[str] = None
     shm_size: Optional[Union[int, str]] = None
-    extra_hosts: Optional[ListOrDict] = None
+    extra_hosts: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     isolation: Optional[str] = None
     privileged: Optional[bool] = None
-    secrets: Optional[ServiceConfigOrSecret] = None
+    secrets: Optional[List[Union[str, ServiceConfigOrSecretItem]]] = None
     tags: Optional[List[str]] = None
     platforms: Optional[List[str]] = None
 
@@ -339,10 +327,10 @@ class Network1(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    aliases: Optional[ListOfStrings] = None
+    aliases: Optional[List[str]] = None
     ipv4_address: Optional[str] = None
     ipv6_address: Optional[str] = None
-    link_local_ips: Optional[ListOfStrings] = None
+    link_local_ips: Optional[List[str]] = None
     priority: Optional[float] = None
 
 
@@ -350,15 +338,13 @@ class Device(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    capabilities: Optional[ListOfStrings] = None
+    capabilities: Optional[List[str]] = None
     count: Optional[Union[str, int]] = None
-    device_ids: Optional[ListOfStrings] = None
+    device_ids: Optional[List[str]] = None
     driver: Optional[str] = None
-    options: Optional[ListOrDict] = None
-
-
-class Devices(BaseModel):
-    __root__: List[Device]
+    options: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
 
 
 class Network(BaseModel):
@@ -373,7 +359,9 @@ class Network(BaseModel):
     internal: Optional[bool] = None
     enable_ipv6: Optional[bool] = None
     attachable: Optional[bool] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
 
 
 class Volume(BaseModel):
@@ -384,7 +372,9 @@ class Volume(BaseModel):
     driver: Optional[str] = None
     driver_opts: Optional[Dict[constr(regex=r'^.+$'), Union[str, float]]] = None
     external: Optional[External] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
 
 
 class Secret(BaseModel):
@@ -395,7 +385,9 @@ class Secret(BaseModel):
     environment: Optional[str] = None
     file: Optional[str] = None
     external: Optional[External2] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     driver: Optional[str] = None
     driver_opts: Optional[Dict[constr(regex=r'^.+$'), Union[str, float]]] = None
     template_driver: Optional[str] = None
@@ -408,12 +400,10 @@ class Config(BaseModel):
     name: Optional[str] = None
     file: Optional[str] = None
     external: Optional[External2] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     template_driver: Optional[str] = None
-
-
-class StringOrList(BaseModel):
-    __root__: Union[str, ListOfStrings]
 
 
 class Reservations(BaseModel):
@@ -422,8 +412,8 @@ class Reservations(BaseModel):
 
     cpus: Optional[Union[float, str]] = None
     memory: Optional[str] = None
-    generic_resources: Optional[GenericResources] = None
-    devices: Optional[Devices] = None
+    generic_resources: Optional[List[GenericResource]] = None
+    devices: Optional[List[Device]] = None
 
 
 class Resources(BaseModel):
@@ -441,7 +431,9 @@ class Deployment(BaseModel):
     mode: Optional[str] = None
     endpoint_mode: Optional[str] = None
     replicas: Optional[int] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     rollback_config: Optional[RollbackConfig] = None
     update_config: Optional[UpdateConfig] = None
     resources: Optional[Resources] = None
@@ -454,15 +446,17 @@ class Service(BaseModel):
         extra = Extra.forbid
 
     deploy: Optional[Deployment] = None
-    annotations: Optional[ListOrDict] = None
+    annotations: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     build: Optional[Union[str, BuildItem]] = None
     blkio_config: Optional[BlkioConfig] = None
     cap_add: Optional[List[str]] = Field(None, unique_items=True)
     cap_drop: Optional[List[str]] = Field(None, unique_items=True)
     cgroup: Optional[Cgroup] = None
     cgroup_parent: Optional[str] = None
-    command: Optional[Command] = None
-    configs: Optional[ServiceConfigOrSecret] = None
+    command: Optional[Union[str, List[str]]] = None
+    configs: Optional[List[Union[str, ServiceConfigOrSecretItem]]] = None
     container_name: Optional[str] = None
     cpu_count: Optional[conint(ge=0)] = None
     cpu_percent: Optional[conint(ge=0, le=100)] = None
@@ -475,21 +469,25 @@ class Service(BaseModel):
     cpuset: Optional[str] = None
     credential_spec: Optional[CredentialSpec] = None
     depends_on: Optional[
-        Union[ListOfStrings, Dict[constr(regex=r'^[a-zA-Z0-9._-]+$'), DependsOn]]
+        Union[Dict[constr(regex=r'^[a-zA-Z0-9._-]+$'), DependsOn], List[str]]
     ] = None
-    device_cgroup_rules: Optional[ListOfStrings] = None
+    device_cgroup_rules: Optional[List[str]] = None
     devices: Optional[List[str]] = Field(None, unique_items=True)
-    dns: Optional[StringOrList] = None
+    dns: Optional[Union[str, List[str]]] = None
     dns_opt: Optional[List[str]] = Field(None, unique_items=True)
-    dns_search: Optional[StringOrList] = None
+    dns_search: Optional[Union[str, List[str]]] = None
     domainname: Optional[str] = None
-    entrypoint: Optional[Command] = None
-    env_file: Optional[StringOrList] = None
-    environment: Optional[ListOrDict] = None
+    entrypoint: Optional[Union[str, List[str]]] = None
+    env_file: Optional[Union[str, List[str]]] = None
+    environment: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     expose: Optional[List[Union[str, float]]] = Field(None, unique_items=True)
     extends: Optional[Union[str, Extend]] = None
     external_links: Optional[List[str]] = Field(None, unique_items=True)
-    extra_hosts: Optional[ListOrDict] = None
+    extra_hosts: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     group_add: Optional[List[Union[str, float]]] = Field(None, unique_items=True)
     healthcheck: Optional[Healthcheck] = None
     hostname: Optional[str] = None
@@ -497,7 +495,9 @@ class Service(BaseModel):
     init: Optional[bool] = None
     ipc: Optional[str] = None
     isolation: Optional[str] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     links: Optional[List[str]] = Field(None, unique_items=True)
     logging: Optional[Logging] = None
     mac_address: Optional[str] = None
@@ -507,9 +507,7 @@ class Service(BaseModel):
     memswap_limit: Optional[Union[float, str]] = None
     network_mode: Optional[str] = None
     networks: Optional[
-        Union[
-            ListOfStrings, Dict[constr(regex=r'^[a-zA-Z0-9._-]+$'), Optional[Network1]]
-        ]
+        Union[Dict[constr(regex=r'^[a-zA-Z0-9._-]+$'), Optional[Network1]], List[str]]
     ] = None
     oom_kill_disable: Optional[bool] = None
     oom_score_adj: Optional[conint(ge=-1000, le=1000)] = None
@@ -518,7 +516,7 @@ class Service(BaseModel):
     platform: Optional[str] = None
     ports: Optional[List[Union[float, str, Port]]] = Field(None, unique_items=True)
     privileged: Optional[bool] = None
-    profiles: Optional[ListOfStrings] = None
+    profiles: Optional[List[str]] = None
     pull_policy: Optional[PullPolicy] = None
     read_only: Optional[bool] = None
     restart: Optional[str] = None
@@ -526,13 +524,15 @@ class Service(BaseModel):
     scale: Optional[int] = None
     security_opt: Optional[List[str]] = Field(None, unique_items=True)
     shm_size: Optional[Union[float, str]] = None
-    secrets: Optional[ServiceConfigOrSecret] = None
-    sysctls: Optional[ListOrDict] = None
+    secrets: Optional[List[Union[str, ServiceConfigOrSecretItem]]] = None
+    sysctls: Optional[
+        Union[Dict[constr(regex=r'.+'), Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     stdin_open: Optional[bool] = None
     stop_grace_period: Optional[str] = None
     stop_signal: Optional[str] = None
     storage_opt: Optional[Dict[str, Any]] = None
-    tmpfs: Optional[StringOrList] = None
+    tmpfs: Optional[Union[str, List[str]]] = None
     tty: Optional[bool] = None
     ulimits: Optional[Dict[constr(regex=r'^[a-z]+$'), Union[int, Ulimit]]] = None
     user: Optional[str] = None

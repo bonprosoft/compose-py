@@ -175,9 +175,6 @@ class GenericResource:
     discrete_resource_spec: Optional[DiscreteResourceSpec] = None
 
 
-GenericResources = List[GenericResource]
-
-
 @dataclass
 class ConfigItem:
     subnet: Optional[str] = None
@@ -196,15 +193,6 @@ class Ipam:
 @dataclass
 class External:
     name: Optional[str] = None
-
-
-Command = Optional[Union[str, List[str]]]
-
-
-ListOfStrings = List[str]
-
-
-ListOrDict = Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
 
 
 @dataclass
@@ -228,9 +216,6 @@ class ServiceConfigOrSecretItem:
     mode: Optional[float] = None
 
 
-ServiceConfigOrSecret = List[Union[str, ServiceConfigOrSecretItem]]
-
-
 Constraints = Any
 
 
@@ -239,21 +224,29 @@ class BuildItem:
     context: Optional[str] = None
     dockerfile: Optional[str] = None
     dockerfile_inline: Optional[str] = None
-    args: Optional[ListOrDict] = None
-    ssh: Optional[ListOrDict] = None
-    labels: Optional[ListOrDict] = None
+    args: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
+    ssh: Optional[Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]] = None
+    labels: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     cache_from: Optional[List[str]] = None
     cache_to: Optional[List[str]] = None
     no_cache: Optional[bool] = None
-    additional_contexts: Optional[ListOrDict] = None
+    additional_contexts: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     network: Optional[str] = None
     pull: Optional[bool] = None
     target: Optional[str] = None
     shm_size: Optional[Union[int, str]] = None
-    extra_hosts: Optional[ListOrDict] = None
+    extra_hosts: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     isolation: Optional[str] = None
     privileged: Optional[bool] = None
-    secrets: Optional[ServiceConfigOrSecret] = None
+    secrets: Optional[List[Union[str, ServiceConfigOrSecretItem]]] = None
     tags: Optional[List[str]] = None
     platforms: Optional[List[str]] = None
 
@@ -270,23 +263,22 @@ class BlkioConfig:
 
 @dataclass
 class Network1:
-    aliases: Optional[ListOfStrings] = None
+    aliases: Optional[List[str]] = None
     ipv4_address: Optional[str] = None
     ipv6_address: Optional[str] = None
-    link_local_ips: Optional[ListOfStrings] = None
+    link_local_ips: Optional[List[str]] = None
     priority: Optional[float] = None
 
 
 @dataclass
 class Device:
-    capabilities: Optional[ListOfStrings] = None
+    capabilities: Optional[List[str]] = None
     count: Optional[Union[str, int]] = None
-    device_ids: Optional[ListOfStrings] = None
+    device_ids: Optional[List[str]] = None
     driver: Optional[str] = None
-    options: Optional[ListOrDict] = None
-
-
-Devices = List[Device]
+    options: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
 
 
 @dataclass
@@ -299,7 +291,9 @@ class Network:
     internal: Optional[bool] = None
     enable_ipv6: Optional[bool] = None
     attachable: Optional[bool] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
 
 
 @dataclass
@@ -308,7 +302,9 @@ class Volume:
     driver: Optional[str] = None
     driver_opts: Optional[Dict[str, Union[str, float]]] = None
     external: Optional[External] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
 
 
 @dataclass
@@ -317,7 +313,9 @@ class Secret:
     environment: Optional[str] = None
     file: Optional[str] = None
     external: Optional[External] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     driver: Optional[str] = None
     driver_opts: Optional[Dict[str, Union[str, float]]] = None
     template_driver: Optional[str] = None
@@ -328,19 +326,18 @@ class Config:
     name: Optional[str] = None
     file: Optional[str] = None
     external: Optional[External] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     template_driver: Optional[str] = None
-
-
-StringOrList = Union[str, ListOfStrings]
 
 
 @dataclass
 class Reservations:
     cpus: Optional[Union[float, str]] = None
     memory: Optional[str] = None
-    generic_resources: Optional[GenericResources] = None
-    devices: Optional[Devices] = None
+    generic_resources: Optional[List[GenericResource]] = None
+    devices: Optional[List[Device]] = None
 
 
 @dataclass
@@ -354,7 +351,9 @@ class Deployment:
     mode: Optional[str] = None
     endpoint_mode: Optional[str] = None
     replicas: Optional[int] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     rollback_config: Optional[RollbackConfig] = None
     update_config: Optional[UpdateConfig] = None
     resources: Optional[Resources] = None
@@ -365,15 +364,17 @@ class Deployment:
 @dataclass
 class Service:
     deploy: Optional[Deployment] = None
-    annotations: Optional[ListOrDict] = None
+    annotations: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     build: Optional[Union[str, BuildItem]] = None
     blkio_config: Optional[BlkioConfig] = None
     cap_add: Optional[List[str]] = None
     cap_drop: Optional[List[str]] = None
     cgroup: Optional[Cgroup] = None
     cgroup_parent: Optional[str] = None
-    command: Optional[Command] = None
-    configs: Optional[ServiceConfigOrSecret] = None
+    command: Optional[Union[str, List[str]]] = None
+    configs: Optional[List[Union[str, ServiceConfigOrSecretItem]]] = None
     container_name: Optional[str] = None
     cpu_count: Optional[int] = None
     cpu_percent: Optional[int] = None
@@ -385,20 +386,24 @@ class Service:
     cpus: Optional[Union[float, str]] = None
     cpuset: Optional[str] = None
     credential_spec: Optional[CredentialSpec] = None
-    depends_on: Optional[Union[ListOfStrings, Dict[str, DependsOn]]] = None
-    device_cgroup_rules: Optional[ListOfStrings] = None
+    depends_on: Optional[Union[Dict[str, DependsOn], List[str]]] = None
+    device_cgroup_rules: Optional[List[str]] = None
     devices: Optional[List[str]] = None
-    dns: Optional[StringOrList] = None
+    dns: Optional[Union[str, List[str]]] = None
     dns_opt: Optional[List[str]] = None
-    dns_search: Optional[StringOrList] = None
+    dns_search: Optional[Union[str, List[str]]] = None
     domainname: Optional[str] = None
-    entrypoint: Optional[Command] = None
-    env_file: Optional[StringOrList] = None
-    environment: Optional[ListOrDict] = None
+    entrypoint: Optional[Union[str, List[str]]] = None
+    env_file: Optional[Union[str, List[str]]] = None
+    environment: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     expose: Optional[List[Union[str, float]]] = None
     extends: Optional[Union[str, Extend]] = None
     external_links: Optional[List[str]] = None
-    extra_hosts: Optional[ListOrDict] = None
+    extra_hosts: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     group_add: Optional[List[Union[str, float]]] = None
     healthcheck: Optional[Healthcheck] = None
     hostname: Optional[str] = None
@@ -406,7 +411,9 @@ class Service:
     init: Optional[bool] = None
     ipc: Optional[str] = None
     isolation: Optional[str] = None
-    labels: Optional[ListOrDict] = None
+    labels: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     links: Optional[List[str]] = None
     logging: Optional[Logging] = None
     mac_address: Optional[str] = None
@@ -415,7 +422,7 @@ class Service:
     mem_swappiness: Optional[int] = None
     memswap_limit: Optional[Union[float, str]] = None
     network_mode: Optional[str] = None
-    networks: Optional[Union[ListOfStrings, Dict[str, Optional[Network1]]]] = None
+    networks: Optional[Union[Dict[str, Optional[Network1]], List[str]]] = None
     oom_kill_disable: Optional[bool] = None
     oom_score_adj: Optional[int] = None
     pid: Optional[str] = None
@@ -423,7 +430,7 @@ class Service:
     platform: Optional[str] = None
     ports: Optional[List[Union[float, str, Port]]] = None
     privileged: Optional[bool] = None
-    profiles: Optional[ListOfStrings] = None
+    profiles: Optional[List[str]] = None
     pull_policy: Optional[PullPolicy] = None
     read_only: Optional[bool] = None
     restart: Optional[str] = None
@@ -431,13 +438,15 @@ class Service:
     scale: Optional[int] = None
     security_opt: Optional[List[str]] = None
     shm_size: Optional[Union[float, str]] = None
-    secrets: Optional[ServiceConfigOrSecret] = None
-    sysctls: Optional[ListOrDict] = None
+    secrets: Optional[List[Union[str, ServiceConfigOrSecretItem]]] = None
+    sysctls: Optional[
+        Union[Dict[str, Optional[Union[str, float, bool]]], List[str]]
+    ] = None
     stdin_open: Optional[bool] = None
     stop_grace_period: Optional[str] = None
     stop_signal: Optional[str] = None
     storage_opt: Optional[Dict[str, Any]] = None
-    tmpfs: Optional[StringOrList] = None
+    tmpfs: Optional[Union[str, List[str]]] = None
     tty: Optional[bool] = None
     ulimits: Optional[Dict[str, Union[int, Ulimit]]] = None
     user: Optional[str] = None
